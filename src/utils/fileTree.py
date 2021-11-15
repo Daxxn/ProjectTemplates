@@ -7,18 +7,20 @@ class FileInfo:
     def __init__(self, path: str = None, parentId: UUID = None) -> None:
         exists = Path.exists(path)
         if exists:
-            self.id = uid()
-            self.parentId = parentId
-            self.isFile = Path.isfile(path)
-            self.name: str = Path.basename(path)
-            self.fullPath: str = path
-            self.children: list[FileInfo] = []
-            self.ext: str = ''
-            self.isImage: bool = self.checkExt(path)
-            if not self.isFile:
-                self.populateChildren(path)
-            else:
-                self.ext: str = Path.splitext(path)[1]
+            isTemp = Path.basename(path).startswith('_')
+            if isTemp:
+                self.id = uid()
+                self.parentId = parentId
+                self.isFile = Path.isfile(path)
+                self.name: str = Path.basename(path)
+                self.fullPath: str = path
+                self.children: list[FileInfo] = []
+                self.ext: str = ''
+                self.isImage: bool = self.checkExt(path)
+                if not self.isFile:
+                    self.populateChildren(path)
+                else:
+                    self.ext: str = Path.splitext(path)[1]
 
     def populateChildren(self, rootDir: str):
         if Path.isdir(rootDir):
@@ -78,3 +80,16 @@ class FileInfo:
             '.jpeg',
             '.PNG'
         ]
+
+
+tableCodes = {
+    'horz': '\u2500',
+    'vert': '\u2503',
+    'rightAngle': '\u2514'
+}
+
+
+def printTree(file: FileInfo) -> None:
+    print(tableCodes['horz'])
+    print(tableCodes['rightAngle'])
+    print(tableCodes['vert'])

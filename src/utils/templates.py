@@ -19,6 +19,7 @@ class TemplateManager:
             templates = FileInfo(Path.join(os.getcwd(), 'src', 'templates'))
             for t in templates.children:
                 print(t.Name)
+            return templates
 
         except Exception as e:
             print(str(e))

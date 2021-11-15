@@ -1,3 +1,4 @@
+from utils.fileTree import printTree
 from utils.templates import TemplateManager
 import sys
 
@@ -19,7 +20,8 @@ def parseArgs():
 
 def main() -> None:
     lang, type, sub = parseArgs()
-    TemplateManager.readTemplates()
+    templates = TemplateManager.readTemplates()
+    printTree(templates)
 
 
 if __name__ == '__main__':
