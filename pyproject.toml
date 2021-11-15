@@ -1,0 +1,13 @@
+[project]
+name = "template-creator"
+version = 0.0.1
+description = "Automatic project template creation."
+readme = "README.md"
+python = "^3.6"
+
+[scripts]
+tc = "template-creator.cli:main"
+
+[tool.autopep8]
+max_line_length = 200
+aggressive = 1
