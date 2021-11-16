@@ -17,7 +17,7 @@
          "request": "launch",
          "program": "./src/main.py",
          "console": "integratedTerminal",
-         "args": ["ts", "server"]
+         "args": ["_ts", "_server"]
       },
       {
          "name": "Good Full Args - Launch",
@@ -25,7 +25,7 @@
          "request": "launch",
          "program": "./src/main.py",
          "console": "integratedTerminal",
-         "args": ["js", "server", "express"]
+         "args": ["_js", "_server", "_express"]
       },
       {
          "name": "Bad Args - Launch",
@@ -33,7 +33,7 @@
          "request": "launch",
          "program": "./src/main.py",
          "console": "integratedTerminal",
-         "args": ["cpp", "server"]
+         "args": ["_cpp", "_sardersuder"]
       }
    ]
 }
