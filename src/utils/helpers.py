@@ -1,5 +1,6 @@
 import os
 import os.path as Path
+from subprocess import Popen
 
 
 def currentDir(fullPath: str):
@@ -11,25 +12,31 @@ def currentDir(fullPath: str):
     return ''
 
 
+# def makeDir(path: str):
+#     if Path.isdir(path):
+#         return True
+#     subPaths = Path.split(path)
+#     if Path.isdir(subPaths[0]):
+#         try:
+#             os.mkdir(path)
+#             return True
+#         except Exception as e:
+#             print(f'Unable to make {path}')
+#             return False
+#     else:
+#         if subPaths[0] == '':
+#             return False
+#         if makeDir(subPaths[0]):
+#             os.mkdir(path)
+#             return True
+#         else:
+#             return False
+
 def makeDir(path: str):
     if Path.isdir(path):
         return True
-    subPaths = Path.split(path)
-    if Path.isdir(subPaths[0]):
-        try:
-            os.mkdir(path)
-            return True
-        except Exception as e:
-            print(f'Unable to make {path}')
-            return False
-    else:
-        if subPaths[0] == '':
-            return False
-        if makeDir(subPaths[0]):
-            os.mkdir(path)
-            return True
-        else:
-            return False
+    os.makedirs(path)
+    return True
 
 
 def copyDir(source: str, dest: str):
@@ -39,4 +46,7 @@ def copyDir(source: str, dest: str):
     if not Path.isdir(dest):
         print('Destination is bad')
         return False
-    os.system(f'rsync -a {source} {dest} --exclude /..config.json')
+    # os.system(f'rsync -a {source} {dest} --exclude /..config.json')
+    process = Popen(f'rsync -a {source} {dest} --exclude /..config.json')
+    process.wait()
+    return True

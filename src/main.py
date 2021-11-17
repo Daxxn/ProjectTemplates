@@ -1,11 +1,16 @@
+from utils.config import ConfigReader
+from utils.licenses import LicenseManager
+from utils.userInput import getUserAnswer, getUserPath, getUserSelection, getUserString
 from project import Project
 from utils.helpers import currentDir
+from utils.print import printFileItem
 from utils.templates import TemplateManager
 import os.path as Path
 import os
 import sys
+from colorama import init, Fore, Back, Style
 
-from utils.userInput import getUserAnswer, getUserPath, getUserSelection, getUserString
+init()
 
 
 def parseArgs():
@@ -26,9 +31,15 @@ def parseArgs():
 def main() -> None:
     lang, type, sub = parseArgs()
     templates = TemplateManager.readTemplates()
+    licenses = LicenseManager.readLicenses()
     previousCWD = os.getcwd()
     print(previousCWD)
     projectTemplate = None
+
+    print('Color Test')
+    print(Fore.BLUE + 'Test')
+    print('Test 2')
+    print(Fore.RESET)
 
     if lang and type:
         projectTemplate = TemplateManager.searchTemplates(
@@ -65,9 +76,19 @@ def main() -> None:
 
     # Ask what dir:
     projectPath = getUserPath(
-        'The project path?', Path.join(defaultDir, projectName))
+        'The project path?', Path.join(previousCWD, projectName))
 
-    newProject = Project(projectTemplate, projectName, projectPath)
+    projectLicense = getUserSelection('What License?', licenses)
+
+    config = ConfigReader.readConfigFile(projectTemplate)
+
+    newProject = Project(
+        projectTemplate,
+        projectName,
+        projectPath,
+        projectLicense,
+        config
+    )
     newProject.createProject()
 
 

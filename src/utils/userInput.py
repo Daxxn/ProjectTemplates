@@ -1,4 +1,5 @@
 import os.path as Path
+from colorama import Fore, Back, Style
 
 
 def getUserAnswer(msg: str, defaultYes: bool = True):
@@ -46,11 +47,12 @@ def getUserString(msg: str, defaultResponse: str = None):
 
 
 def getUserPath(msg: str, defaultPath: str):
-    print(f'{msg}\n  {defaultPath}')
+    print(f'{msg}')
+    print(Fore.CYAN + f'  {defaultPath}' + Style.RESET_ALL)
     while True:
         inp = input()
         if inp:
-            if inp.startswith('^/'):
+            if inp.startswith('^'):
                 inp = inp.strip('^')
                 return Path.normpath(inp)
             else:

@@ -1,4 +1,5 @@
 {
     "scripts": ["npm install"],
-    "license": "/path/to/license/file"
+    "pm": "npm",
+    "dependencies": []
 }
