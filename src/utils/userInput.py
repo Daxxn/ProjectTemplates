@@ -1,6 +1,8 @@
 import os.path as Path
 from colorama import Fore, Back, Style
 
+from utils.print import Printer
+
 
 def getUserAnswer(msg: str, defaultYes: bool = True):
     yesNoDisp = '[Y/n]' if defaultYes else '[y/N]'
@@ -16,11 +18,13 @@ def getUserAnswer(msg: str, defaultYes: bool = True):
 
 
 def getUserSelection(msg: str, selections: list, useIndex: bool = True, ignoreCase: bool = True):
-    print(msg)
-    for s in range(len(selections)):
-        print(f'{s} ) {selections[s]}')
+    # print(msg)
+    # for s in range(len(selections)):
+    #     print(f'{s} ) {selections[s]}')
+    if useIndex:
+        Printer.numberedList(msg, selections)
     while True:
-        inputStr = input('>  ')
+        inputStr = input(f'{Fore.GREEN}>{Fore.RESET}  ')
         try:
             index = int(inputStr)
             if index >= 0 and index < len(selections):
@@ -29,12 +33,16 @@ def getUserSelection(msg: str, selections: list, useIndex: bool = True, ignoreCa
             for sel in selections:
                 if str(sel) == inputStr or (ignoreCase and str(sel).lower() == inputStr.lower()):
                     return sel
-        print('No match.')
+        print(f'{Fore.RED}No match. Try Again{Fore.RESET}')
 
 
 def getUserString(msg: str, defaultResponse: str = None):
     if defaultResponse:
-        inp = input(f'{msg}  ')
+        inp = ''
+        if len(msg) > 80:
+            inp = input(f'{msg}\n{Fore.GREEN}>  {Fore.RESET}')
+        else:
+            inp = input(f'{msg}{Fore.GREEN}>  {Fore.RESET}')
         if inp:
             return inp
         else:
@@ -47,15 +55,15 @@ def getUserString(msg: str, defaultResponse: str = None):
 
 
 def getUserPath(msg: str, defaultPath: str):
-    print(f'{msg}')
-    print(Fore.CYAN + f'  {defaultPath}' + Style.RESET_ALL)
+    print(f'{msg} {Fore.YELLOW + Style.DIM}: Append path \'./\'{Style.RESET_ALL}')
+    print(Fore.CYAN + f'   {defaultPath}' + Style.RESET_ALL)
     while True:
         inp = input()
         if inp:
-            if inp.startswith('^'):
-                inp = inp.strip('^')
+            if not inp.startswith('./') or inp.startswith('/home'):
                 return Path.normpath(inp)
             else:
+                inp = inp.strip('./')
                 combPath = Path.join(defaultPath, inp)
                 return Path.normpath(combPath)
         else:

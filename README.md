@@ -28,6 +28,18 @@ The config file is placed at the root of the template project (with the package.
 }
 ```
 
+```json
+{
+    "pm": "npm",
+    "install": "install",
+    "depCheck": "version",
+    "dependencies": [
+        "package-a",
+        "package-b"
+    ]
+}
+```
+
 ### Installation
 
 I'm not sure how to install the package globally yet. for now its using the python interpreter and setting a bash alias to trigger it.

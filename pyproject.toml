@@ -10,4 +10,5 @@ tc = "template-creator.cli:main"
 
 [tool.autopep8]
 max_line_length = 200
-aggressive = 1
+aggressive = 0
+recursive = true

@@ -8,8 +8,8 @@ class Template:
         self.type = type
         self.sub = sub
 
-    def toString(self):
-        return f'T - {self.Lang} : {self.Type} : {self.Sub}\n\tPath : ./templates/{self.lang}/{self.type}/{self.sub}'
+    def __str__(self):
+        return f'{self.Lang} : {self.Type} : {self.Sub}\n  Path : ./templates/{self.lang}/{self.type}/{self.sub}'
 
     def equals(self, lang: str, type: str, sub: str = ''):
         if self.lang == lang and self.type == type:
@@ -101,14 +101,6 @@ class TemplateManager:
                 if temp.lang == lang and temp.type == type and temp.sub and not output.__contains__(temp.sub):
                     output.append(temp.sub)
         return output
-
-    # @staticmethod
-    # def readTemplates():
-    #     try:
-    #         return FileInfo(Path.join(os.getcwd(), 'src', 'templates'))
-
-    #     except Exception as e:
-    #         print(str(e))
 
     @staticmethod
     def getRootTemplatePath():

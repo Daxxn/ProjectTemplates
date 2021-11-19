@@ -3,7 +3,7 @@ from utils.licenses import LicenseManager
 from utils.userInput import getUserAnswer, getUserPath, getUserSelection, getUserString
 from project import Project
 from utils.helpers import currentDir
-from utils.print import printFileItem
+from utils.print import Printer, printFileItem
 from utils.templates import TemplateManager
 import os.path as Path
 import os
@@ -24,59 +24,60 @@ def parseArgs():
     elif len(sys.argv) == 3:
         lang = sys.argv[1]
         type = sys.argv[2]
-    print('Args: ', [lang, type, sub])
+    print(f'{Fore.BLUE + Style.BRIGHT}Args: {Style.RESET_ALL}',
+          [lang, type, sub])
     return (lang, type, sub)
 
 
 def main() -> None:
+    print(f'{Back.BLUE + Style.BRIGHT}\n\tTemplate Creator{Style.RESET_ALL}\n')
     lang, type, sub = parseArgs()
     templates = TemplateManager.readTemplates()
     licenses = LicenseManager.readLicenses()
     previousCWD = os.getcwd()
-    print(previousCWD)
+    print(f'{Fore.BLUE}Current Dir:{Fore.RESET} {previousCWD}')
     projectTemplate = None
-
-    print('Color Test')
-    print(Fore.BLUE + 'Test')
-    print('Test 2')
-    print(Fore.RESET)
 
     if lang and type:
         projectTemplate = TemplateManager.searchTemplates(
             templates, lang, type, sub)
     else:
         while True:
-            print('::: Select Project Type :::')
-            print()
-
+            Printer.message('\t::: Select Project Type :::', Fore.CYAN)
             lang = getUserSelection(
-                'Select Language:', TemplateManager.getLanguages(templates))
+                'Language?', TemplateManager.getLanguages(templates))
             type = getUserSelection(
-                'Select Type:', TemplateManager.getTypes(templates, lang))
+                'Project Type?', TemplateManager.getTypes(templates, lang))
             subs = TemplateManager.getSubs(templates, lang, type)
             if len(subs) > 0:
                 sub = getUserSelection(
-                    'Select Sub:', subs)
+                    'Sub Type?', subs
+                )
             projectTemplate = TemplateManager.searchTemplates(
-                templates, lang, type, sub)
+                templates, lang, type, sub
+            )
             if projectTemplate:
                 break
 
-    print(projectTemplate.toString())
+    Printer.message(
+        f'{Fore.GREEN + Style.BRIGHT}Project Found:\n {Style.RESET_ALL}{projectTemplate}')
 
     print()
-    print(':: Project Setup ::')
+    Printer.message('\t:: Project Setup ::', Fore.CYAN)
 
     os.chdir(previousCWD)
 
     # Ask for the project name:
     defaultDir = currentDir(previousCWD)
     projectName = getUserString(
-        f'Whats the projects name? [{defaultDir}]', defaultDir)
+        f'Whats the projects name? [{Fore.BLUE}{defaultDir}{Fore.RESET}]', defaultDir)
 
     # Ask what dir:
-    projectPath = getUserPath(
-        'The project path?', Path.join(previousCWD, projectName))
+    rootPath = getUserPath(
+        'The project path?', previousCWD)
+    projectPath = Path.join(rootPath, projectName)
+
+    Printer.message(projectPath, Fore.CYAN)
 
     projectLicense = getUserSelection('What License?', licenses)
 
@@ -90,6 +91,8 @@ def main() -> None:
         config
     )
     newProject.createProject()
+
+    Printer.message('All Done!! Have fun! ;)', Fore.LIGHTBLUE_EX)
 
 
 if __name__ == '__main__':

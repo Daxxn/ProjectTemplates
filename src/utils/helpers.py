@@ -1,6 +1,10 @@
 import os
 import os.path as Path
-from subprocess import Popen
+from subprocess import Popen, run
+import sys
+from colorama import Fore, Back, Style
+
+from utils.print import Printer
 
 
 def currentDir(fullPath: str):
@@ -41,12 +45,29 @@ def makeDir(path: str):
 
 def copyDir(source: str, dest: str):
     if not Path.isdir(source):
-        print('Source is bad')
+        Printer.error(f'Source Dir Not Found : {source}')
         return False
     if not Path.isdir(dest):
-        print('Destination is bad')
+        Printer.error(f'Destination Dir Not Found : {dest}')
         return False
     # os.system(f'rsync -a {source} {dest} --exclude /..config.json')
-    process = Popen(f'rsync -a {source} {dest} --exclude /..config.json')
+    process = Popen(
+        # f'/usr/bin/rsync -a {source} {dest} --exclude /..config.json')
+        ['/usr/bin/rsync', '-a', '-v', source,
+            dest, '--exclude', '/..config.json'],
+        stdout=sys.stdout,
+        stderr=sys.stderr)
+    process.wait()
+    return True
+
+
+def copyFile(source: str, dest: str):
+    if not Path.isfile(source):
+        Printer.error(f'Source File Not Found : {source}')
+        return False
+    if not Path.isdir(dest):
+        Printer.error(f'Destination File Not Found : {dest}')
+        return False
+    process = Popen(['/usr/bin/rsync', '-a', '-v', source, dest])
     process.wait()
     return True

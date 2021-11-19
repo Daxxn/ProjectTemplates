@@ -1,5 +1,6 @@
 {
-    "scripts": ["npm install"],
     "pm": "npm",
+    "install": "install",
+    "depCheck": "ls",
     "dependencies": []
 }

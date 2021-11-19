@@ -6,18 +6,21 @@ import os.path as Path
 class Config:
     def __init__(self) -> None:
         self.pm: str = ''
+        self.install: str = ''
+        self.depCheck: str = ''
         self.dependencies: list[str] = []
-        self.scripts: list[str] = []
 
     @staticmethod
     def deserialize(data: dict):
         self = Config()
-        if data['scripts']:
-            self.scripts = data['scripts']
-        if data.dependencies:
-            self.dependencies = data['dependencies']
         if data['pm']:
             self.pm = data['pm']
+        if data['install']:
+            self.install = data['install']
+        if data['depCheck']:
+            self.depCheck = data['depCheck']
+        if data['dependencies']:
+            self.dependencies = data['dependencies']
         return self
 
 
@@ -25,7 +28,10 @@ class ConfigReader:
     @staticmethod
     def readConfigFile(template: Template):
         try:
-            with open(Path.join(template.FullPath, '..config.json'), 'r') as file:
-                return Config.deserialize(load(file))
+            path = Path.join(template.FullPath, '..config.json')
+            if (Path.isfile(path)):
+                with open(path, 'r') as file:
+                    return Config.deserialize(load(file))
+            return None
         except Exception as e:
             print(str(e))

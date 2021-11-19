@@ -1,4 +1,7 @@
 {
+    "pm": "pip",
+    "install": "install -r requirements.txt",
+    "depCheck": "list",
     "dependencies": [
         "PySide6"
     ]
